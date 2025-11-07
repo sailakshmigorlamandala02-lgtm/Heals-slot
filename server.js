@@ -29,9 +29,12 @@ async function connectDB() {
     // Use MongoDB Atlas cloud database
     const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://hospitalmanagement_user:sai0228@cluster0.eh9qu4h.mongodb.net/hospitalDB?retryWrites=true&w=majority&appName=Cluster0';
     await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 10000,
+      serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
-      connectTimeoutMS: 10000,
+      connectTimeoutMS: 5000,
+      maxPoolSize: 10,
+      minPoolSize: 2,
+      maxIdleTimeMS: 30000,
     });
     console.log('Connected to MongoDB Atlas');
   } catch (err) {
@@ -53,6 +56,15 @@ async function connectDB() {
   const Leave = require('./models/Leave');
   const Notification = require('./models/Notification');
   const Prescription = require('./models/Prescription');
+
+  // Health check endpoint for monitoring services (UptimeRobot, etc.)
+  app.get('/health', (req, res) => {
+    res.status(200).json({ 
+      status: 'ok', 
+      message: 'HealSlot server is running',
+      timestamp: new Date().toISOString()
+    });
+  });
 
   // Routes
 
