@@ -1,7 +1,9 @@
 // Common data structures and functions for Hospital Management System
 
-// API Base URL
-const API_BASE = 'http://localhost:3000/api';
+// API Base URL - automatically detects environment
+const API_BASE = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3000/api' 
+  : `${window.location.protocol}//${window.location.host}/api`;
 
 // User session
 let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
