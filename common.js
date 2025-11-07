@@ -157,13 +157,18 @@ async function getUsers(hospital, role) {
   return await apiCall(`/users/${hospital}/${role}`);
 }
 
-// Initialize on load
+// Initialize on load - only redirect if not on index page
 document.addEventListener('DOMContentLoaded', function() {
+  const isIndexPage = window.location.pathname === '/' || window.location.pathname.endsWith('index.html');
+  
   if (currentUser && window.location.pathname.includes(`${currentUser.role}.html`)) {
     // Already on correct page
-  } else if (currentUser) {
+  } else if (currentUser && !isIndexPage) {
+    // Only redirect if user is logged in and not on index page
     window.location.href = `${currentUser.role}.html`;
-  } else {
+  } else if (!currentUser && !isIndexPage && !window.location.pathname.endsWith('.html')) {
+    // Only redirect to index if not logged in and not already on a page
     window.location.href = 'index.html';
   }
+  // If on index page, don't redirect - let user interact
 });
