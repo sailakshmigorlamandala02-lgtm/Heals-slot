@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hospital Management System - Multi-Portal Frontend</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">HealSlot</div>
+  <!-- Hospital Selection -->
+  <div id="hospital" class="container dashboard">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card portal-card">
+          <h2 class="text-center">Select Hospital</h2>
+          <form id="hospitalForm">
+            <div class="mb-3">
+              <label for="hospitalSelect" class="form-label">Choose Hospital</label>
+              <select id="hospitalSelect" class="form-select" required>
+                <option value="" disabled selected>Select a hospital</option>
+                <option value="hospital1">City General Hospital</option>
+                <option value="hospital2">Sunrise Medical Center</option>
+                <option value="hospital3">Hope Regional Hospital</option>
+                <option value="hospital4">Apollo Hospital</option>
+                <option value="hospital5">KIMS</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Proceed to Login</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Login Form -->
+  <div id="login" class="container dashboard hidden">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card portal-card">
+          <h2 class="text-center">Login</h2>
+          <form id="loginForm">
+            <div class="mb-3">
+              <label for="role" class="form-label">Select Role</label>
+              <select id="role" class="form-select" onchange="updateLoginForm()" required>
+                <option value="patient">Patient</option>
+                <option value="doctor">Doctor</option>
+                <option value="pharmacist">Pharmacist</option>
+                <option value="receptionist">Receptionist</option>
+                <option value="admin">Admin</option>
+                <option value="nurse">Nurse</option>
+                <option value="lab">Lab Technician</option>
+              </select>
+            </div>
+            <div id="loginFields"></div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+          </form>
+          <button class="btn btn-secondary w-100 mt-2" onclick="showPortal('register')">New User? Register Here</button>
+          <button class="btn btn-outline-secondary w-100 mt-2" onclick="showPortal('hospital')">Back to Hospital Selection</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Registration Form -->
+  <div id="register" class="container dashboard hidden">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card portal-card">
+          <h2 class="text-center">Register</h2>
+          <form id="registerForm">
+            <div class="mb-3">
+              <label for="regRole" class="form-label">Select Role</label>
+              <select id="regRole" class="form-select" onchange="updateRegForm()" required>
+                <option value="patient">Patient</option>
+                <option value="doctor">Doctor</option>
+                <option value="pharmacist">Pharmacist</option>
+                <option value="receptionist">Receptionist</option>
+                <option value="admin">Admin</option>
+                <option value="nurse">Nurse</option>
+                <option value="lab">Lab Technician</option>
+              </select>
+            </div>
+            <div id="regFields"></div>
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+            <button type="button" class="btn btn-secondary w-100 mt-2" onclick="showPortal('login')">Back to Login</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  <script src="common.js"></script>
+  <script>
+    function showPortal(portal) {
+      document.querySelectorAll('.dashboard').forEach(d => d.classList.add('hidden'));
+      const portalElement = document.getElementById(portal);
+      if (portalElement) {
+        portalElement.classList.remove('hidden');
+      } else {
+        alert('Error: Portal not found!');
+      }
+    }
+
+    function selectHospital(event) {
+      event.preventDefault();
+      const hospital = document.getElementById('hospitalSelect').value;
+      if (hospital) {
+        selectedHospital = hospital;
+        showPortal('login');
+        document.getElementById('hospitalForm').reset();
+      } else {
+        alert('Please select a hospital!');
+      }
+    }
+
+    async function login(event) {
+      event.preventDefault();
+      if (!selectedHospital) {
+        alert('Please select a hospital first!');
+        showPortal('hospital');
+        return;
+      }
+      const role = document.getElementById('role').value;
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      if (username && password) {
+        const result = await loginUser(username, password, role, selectedHospital);
+        if (result.success) {
+          window.location.href = `${role}.html`;
+        } else {
+          alert(result.message || 'Login failed!');
+        }
+      } else {
+        alert('Please enter both username and password!');
+      }
+    }
+
+    async function register(event) {
+      event.preventDefault();
+      if (!selectedHospital) {
+        alert('Please select a hospital first!');
+        showPortal('hospital');
+        return;
+      }
+      const role = document.getElementById('regRole').value;
+      const name = document.getElementById('regName')?.value.trim() || 'Unknown';
+      const email = document.getElementById('regEmail')?.value.trim() || '';
+      const username = document.getElementById('regUsername')?.value.trim() || '';
+      const password = document.getElementById('regPassword')?.value || '';
+      const confirmPassword = document.getElementById('regConfirmPassword')?.value || '';
+
+      if (!username || !password) {
+        alert('Please enter both username and password!');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert('Passwords do not match!');
+        return;
+      }
+
+      const userData = {
+        role,
+        username,
+        password,
+        hospital: selectedHospital,
+        name,
+        email
+      };
+
+      // Add role-specific fields
+      if (role === 'doctor') userData.specialty = document.getElementById('regSpecialty')?.value || '';
+      else if (role === 'pharmacist') userData.license = document.getElementById('regLicense')?.value || '';
+      else if (role === 'receptionist') userData.department = document.getElementById('regDepartment')?.value || '';
+      else if (role === 'admin') userData.adminCode = document.getElementById('regAdminCode')?.value || '';
+      else if (role === 'nurse') userData.license = document.getElementById('regNurseLicense')?.value || '';
+      else if (role === 'lab') userData.cert = document.getElementById('regLabCert')?.value || '';
+
+      const result = await registerUser(userData);
+      if (result.success) {
+        const hospitalName = selectedHospital.replace('hospital1', 'City General Hospital')
+          .replace('hospital2', 'Sunrise Medical Center')
+          .replace('hospital3', 'Hope Regional Hospital')
+          .replace('hospital4', 'Apollo Hospital')
+          .replace('hospital5', 'KIMS');
+        alert(`${role.charAt(0).toUpperCase() + role.slice(1)} registered successfully at ${hospitalName}!\n\nYour account is ready. You can now login with your chosen credentials.`);
+        showPortal('login');
+        document.getElementById('registerForm').reset();
+      } else {
+        alert('Registration failed: ' + (result.error || 'Unknown error'));
+      }
+    }
+
+    function updateLoginForm() {
+      const role = document.getElementById('role').value;
+      const fields = document.getElementById('loginFields');
+      let html = `
+        <div class="mb-3"><label for="username" class="form-label">Username</label><input type="text" id="username" class="form-control" required></div>
+        <div class="mb-3"><label for="password" class="form-label">Password</label><input type="password" id="password" class="form-control" required></div>
+      `;
+      fields.innerHTML = html;
+    }
+
+    function updateRegForm() {
+      const role = document.getElementById('regRole').value;
+      const fields = document.getElementById('regFields');
+      let html = `
+        <div class="mb-3"><label for="regName" class="form-label">Name</label><input type="text" id="regName" class="form-control" required></div>
+        <div class="mb-3"><label for="regEmail" class="form-label">Email</label><input type="email" id="regEmail" class="form-control" required></div>
+        <div class="mb-3"><label for="regUsername" class="form-label">Username</label><input type="text" id="regUsername" class="form-control" required></div>
+        <div class="mb-3"><label for="regPassword" class="form-label">Password</label><input type="password" id="regPassword" class="form-control" required></div>
+        <div class="mb-3"><label for="regConfirmPassword" class="form-label">Confirm Password</label><input type="password" id="regConfirmPassword" class="form-control" required></div>
+      `;
+      if (role === 'doctor') html += `<div class="mb-3"><label for="regSpecialty" class="form-label">Specialty</label><input type="text" id="regSpecialty" class="form-control" required></div>`;
+      else if (role === 'pharmacist') html += `<div class="mb-3"><label for="regLicense" class="form-label">Pharmacy License</label><input type="text" id="regLicense" class="form-control" required></div>`;
+      else if (role === 'receptionist') html += `<div class="mb-3"><label for="regDepartment" class="form-label">Department</label><input type="text" id="regDepartment" class="form-control" required></div>`;
+      else if (role === 'admin') html += `<div class="mb-3"><label for="regAdminCode" class="form-label">Admin Code</label><input type="text" id="regAdminCode" class="form-control" required></div>`;
+      else if (role === 'nurse') html += `<div class="mb-3"><label for="regNurseLicense" class="form-label">Nursing License</label><input type="text" id="regNurseLicense" class="form-control" required></div>`;
+      else if (role === 'lab') html += `<div class="mb-3"><label for="regLabCert" class="form-label">Lab Certification</label><input type="text" id="regLabCert" class="form-control" required></div>`;
+      fields.innerHTML = html;
+    }
+
+    // Initialize
+    showPortal('hospital');
+    document.getElementById('hospitalForm').addEventListener('submit', selectHospital);
+    document.getElementById('loginForm').addEventListener('submit', login);
+    document.getElementById('registerForm').addEventListener('submit', register);
+    updateLoginForm();
+    updateRegForm();
+  </script>
+</body>
+</html>

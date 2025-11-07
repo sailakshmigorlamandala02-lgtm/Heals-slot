@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Receptionist Portal - Hospital Management System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">HealSlot - Receptionist Portal</div>
+  <!-- Receptionist Portal Dashboard -->
+  <div class="container dashboard">
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Receptionist Dashboard</h2>
+        <div class="row">
+          <div class="col-md-3"><button class="btn btn-outline-primary feature-btn w-100" onclick="showReceptionistFeature('scheduling')"><i class="fas fa-calendar-plus"></i> Scheduling</button></div>
+          <div class="col-md-3"><button class="btn btn-outline-primary feature-btn w-100" onclick="showReceptionistFeature('checkin')"><i class="fas fa-clipboard-check"></i> Check-in/Check-out</button></div>
+          <div class="col-md-3"><button class="btn btn-outline-primary feature-btn w-100" onclick="showReceptionistFeature('payments')"><i class="fas fa-cash-register"></i> Payments</button></div>
+          <div class="col-md-3"><button class="btn btn-outline-primary feature-btn w-100" onclick="showReceptionistFeature('queries')"><i class="fas fa-question-circle"></i> Query Handling</button></div>
+          <div class="col-md-3"><button class="btn btn-outline-secondary feature-btn w-100" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button></div>
+        </div>
+        <div id="receptionistFeature" class="mt-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  <script src="common.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!currentUser || currentUser.role !== 'receptionist') {
+        window.location.href = 'index.html';
+      }
+    });
+  </script>
+  <script src="receptionist.js"></script>
+</body>
+</html>

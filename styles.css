@@ -1,0 +1,12 @@
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; }
+.header { background-color: #0056b3; color: white; padding: 1rem; text-align: center; font-size: 2rem; font-weight: bold; }
+.portal-card { background: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin: 1rem; padding: 1.5rem; transition: transform 0.3s; }
+.portal-card:hover { transform: translateY(-5px); }
+.dashboard { padding: 2rem; }
+.feature-btn { margin: 0.5rem; }
+.hidden { display: none; }
+.alert { margin-top: 1rem; }
+table { margin-top: 1rem; }
+.portal-btn { background-color: #0056b3; color: white; border: none; padding: 0.5rem 1rem; margin: 0 0.5rem; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
+.portal-btn:hover { background-color: #003d80; }
+.uploaded-file { margin: 0.5rem 0; padding: 0.5rem; background: #e9ecef; border-radius: 5px; font-size: 0.9rem; }
